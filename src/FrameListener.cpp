@@ -3,7 +3,7 @@
 
 FrameListener::FrameListener() {
     mPendingFrames = 0;
-    mTimeout = std::chrono::milliseconds(100);
+    mTimeout = std::chrono::milliseconds(200);
     mRunning = true;
 }
 

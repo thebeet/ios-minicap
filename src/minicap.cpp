@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <stdlib.h>
 #include <sys/socket.h>
@@ -7,7 +8,6 @@
 
 #include <iostream>
 
-#include "SimpleServer.hpp"
 #include "FrameListener.hpp"
 #include "Banner.hpp"
 #include "JpegEncoder.hpp"
@@ -30,7 +30,6 @@ void print_usage(char **argv) {
     printf("Usage: %s [OPTIONS]\n", (name ? name + 1: argv[0]));
     printf("Stream video from a device.\n");
     printf("  -u, --udid UDID\t\ttarget specific device by its 40-digit device UDID\n");
-    printf("  -p, --port PORT\t\tport to run server on\n");
     printf("  -r, --resolution RESOLUTION\tdesired resolution <w>x<h>\n");
     printf("  -h, --help\t\t\tprints usage information\n");
     printf("\n");
@@ -38,7 +37,7 @@ void print_usage(char **argv) {
 
 
 bool parse_args(int argc, char **argv, const char **udid, int *port, const char **resolution) {
-    if ( argc < 7 ) {
+    if ( argc < 5 ) {
         // Currently the easiest way to make all arguments required
         print_usage(argv);
         return false;
@@ -116,7 +115,7 @@ static void setup_signal_handler() {
 static ssize_t pumps(int fd, unsigned char* data, size_t length) {
     do {
         // SIGPIPE is set to ignored so we will just get EPIPE instead
-        ssize_t wrote = send(fd, data, length, 0);
+        ssize_t wrote = write(fd, data, length);
 
         if (wrote < 0) {
             return wrote;
@@ -126,7 +125,6 @@ static ssize_t pumps(int fd, unsigned char* data, size_t length) {
         length -= wrote;
     }
     while (length > 0);
-
     return 0;
 }
 
@@ -137,7 +135,6 @@ void parseResolution(const char* resolution, uint32_t* width, uint32_t* height) 
     *width = std::stoul(_resolution.substr(0, sep).c_str());
     *height = std::stoul(_resolution.substr(sep+1, _resolution.length()).c_str());
 }
-
 
 int main(int argc, char **argv) {
     const char *udid = NULL;
@@ -195,8 +192,8 @@ int main(int argc, char **argv) {
             encoder.encode(&frame);
             client.releaseFrame(&frame);
             putUInt32LE(frameSize, encoder.getEncodedSize());
-            write(1, frameSize, 4);
-            write(1, encoder.getEncodedData(), encoder.getEncodedSize());
+            pumps(1, frameSize, 4);
+            pumps(1, encoder.getEncodedData(), encoder.getEncodedSize());
         }
         client.stop();
     }

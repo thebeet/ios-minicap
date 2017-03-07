@@ -5,7 +5,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wall -O2")
 
 set(SOURCE_FILES
         src/minicap.cpp
-        src/SimpleServer.cpp src/SimpleServer.hpp
         src/FrameListener.cpp src/FrameListener.hpp
         src/Banner.cpp src/Banner.hpp
         src/JpegEncoder.cpp src/JpegEncoder.hpp
