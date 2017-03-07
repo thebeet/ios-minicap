@@ -12,7 +12,7 @@ JpegEncoder::JpegEncoder(Frame *frame) {
             frame->height,
             mSubsampling
     );
-    std::cout << "Allocating " << mBufferSize << " bytes for JPEG encoder" << std::endl;
+    std::cerr << "Allocating " << mBufferSize << " bytes for JPEG encoder" << std::endl;
 
     mEncodedData = tjAlloc(mBufferSize);
     mEncodedSize = 0;
@@ -37,7 +37,7 @@ void JpegEncoder::encode(Frame *frame) {
              mSubsampling,
              mQuality,
              TJFLAG_FASTDCT | TJFLAG_NOREALLOC) < 0 ) {
-        std::cout << "Compress to JPEG failed: " << tjGetErrorStr() << std::endl;
+        std::cerr << "Compress to JPEG failed: " << tjGetErrorStr() << std::endl;
 
     };
 }

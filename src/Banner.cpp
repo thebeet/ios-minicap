@@ -21,22 +21,16 @@ Banner::Banner(DeviceInfo realInfo, DeviceInfo desiredInfo) {
     mData[22] = (unsigned char) desiredInfo.orientation;
     mData[23] = quirks;
 
-    std::cout << "== Banner ==" << std::endl;
-    std::cout << "version: " << BANNER_VERSION << std::endl;
-    std::cout << "size: " << BANNER_SIZE << std::endl;
-    std::cout << "pid: " << getpid() << std::endl;
-    std::cout << "real width: " << realInfo.width << std::endl;
-    std::cout << "real height: " << realInfo.height << std::endl;
-    std::cout << "desired width: " << desiredInfo.width << std::endl;
-    std::cout << "desired height: " << desiredInfo.height << std::endl;
-    std::cout << "orientation: " << desiredInfo.orientation << std::endl;
-    std::cout << "quirks: " << (int) quirks << std::endl;
-
-    printf("banner: ");
-    for (int i = 0; i < mSize; i++) {
-        printf("%x", mData[i]);
-    }
-    printf("\n");
+    std::cerr << "== Banner ==" << std::endl;
+    std::cerr << "version: " << BANNER_VERSION << std::endl;
+    std::cerr << "size: " << BANNER_SIZE << std::endl;
+    std::cerr << "pid: " << getpid() << std::endl;
+    std::cerr << "real width: " << realInfo.width << std::endl;
+    std::cerr << "real height: " << realInfo.height << std::endl;
+    std::cerr << "desired width: " << desiredInfo.width << std::endl;
+    std::cerr << "desired height: " << desiredInfo.height << std::endl;
+    std::cerr << "orientation: " << desiredInfo.orientation << std::endl;
+    std::cerr << "quirks: " << (int) quirks << std::endl;
 }
 
 

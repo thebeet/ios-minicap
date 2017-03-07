@@ -168,7 +168,7 @@ int main(int argc, char **argv) {
     Frame frame;
 
     client.lockFrame(&frame);
-    std::cout << "resolution: " << frame.width << "x" << frame.height << std::endl;
+    std::cerr << "resolution: " << frame.width << "x" << frame.height << std::endl;
     JpegEncoder encoder(&frame);
 
     DeviceInfo realInfo, desiredInfo;
@@ -182,16 +182,12 @@ int main(int argc, char **argv) {
     Banner banner(realInfo, desiredInfo);
     client.releaseFrame(&frame);
 
-
-    SimpleServer server;
-    server.start(port);
-    int socket;
-
     unsigned char frameSize[4];
-    while (gWaiter.isRunning() and (socket = server.accept()) > 0) {
-        std::cout << "New client connection" << std::endl;
+    while (gWaiter.isRunning() > 0) {
+        std::cerr << "New client connection" << std::endl;
 
-        send(socket, banner.getData(), banner.getSize(), 0);
+        //send(socket, banner.getData(), banner.getSize(), 0);
+        write(1, banner.getData(), banner.getSize());
 
         client.start();
         while (gWaiter.isRunning() and gWaiter.waitForFrame() > 0) {
@@ -199,12 +195,8 @@ int main(int argc, char **argv) {
             encoder.encode(&frame);
             client.releaseFrame(&frame);
             putUInt32LE(frameSize, encoder.getEncodedSize());
-            if ( pumps(socket, frameSize, 4) < 0 ) {
-                break;
-            }
-            if ( pumps(socket, encoder.getEncodedData(), encoder.getEncodedSize()) < 0 ) {
-                break;
-            }
+            write(1, frameSize, 4);
+            write(1, encoder.getEncodedData(), encoder.getEncodedSize());
         }
         client.stop();
     }

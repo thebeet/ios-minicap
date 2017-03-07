@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5.2)
 project(ios_minicap)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wall -g")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x -Wall -O2")
 
 set(SOURCE_FILES
         src/minicap.cpp

@@ -112,7 +112,7 @@ struct StreamClientImpl {
 
 void EnableDALDevices()
 {
-    std::cout << "EnableDALDevices" << std::endl;
+    std::cerr << "EnableDALDevices" << std::endl;
     CMIOObjectPropertyAddress prop = {
             kCMIOHardwarePropertyAllowScreenCaptureDevices,
             kCMIOObjectPropertyScopeGlobal,
@@ -190,13 +190,13 @@ void StreamClient::lockFrame(Frame *frame) {
 
     if (!mBuffer) {
         // TODO: handle don't have buffer to lock
-        std::cout << "Trying to lockFrame without buffer" << std::endl;
+        std::cerr << "Trying to lockFrame without buffer" << std::endl;
         return;
     }
 
     if (mLockedBuffer) {
         // TODO: handle already have locked buffer
-        std::cout << "Trying to lockFrame, but already have a locked buffer" << std::endl;
+        std::cerr << "Trying to lockFrame, but already have a locked buffer" << std::endl;
         return;
     }
 
@@ -221,7 +221,7 @@ void StreamClient::releaseFrame(Frame *frame) {
 
     if (!mLockedBuffer) {
         // TODO: handle releasing frame without locked buffer
-        std::cout << "Trying to releaseFrame without locked buffer" << std::endl;
+        std::cerr << "Trying to releaseFrame without locked buffer" << std::endl;
         return;
     }
 
