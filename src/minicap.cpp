@@ -180,14 +180,23 @@ int main(int argc, char **argv) {
     client.releaseFrame(&frame);
 
     unsigned char frameSize[4];
+    int ppid = getppid();
+
     while (gWaiter.isRunning() > 0) {
         std::cerr << "New client connection" << std::endl;
-
+        ppid = getppid();
+        if (ppid == 1) {
+            break;
+        }
         //send(socket, banner.getData(), banner.getSize(), 0);
         write(1, banner.getData(), banner.getSize());
 
         client.start();
         while (gWaiter.isRunning() and gWaiter.waitForFrame() > 0) {
+            ppid = getppid();
+            if (ppid == 1) {
+                break;
+            }
             client.lockFrame(&frame);
             encoder.encode(&frame);
             client.releaseFrame(&frame);
