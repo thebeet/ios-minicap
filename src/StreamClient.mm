@@ -3,6 +3,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMediaIO/CMIOHardware.h>
 #import <iostream>
+#include <unistd.h>
 
 #include <TargetConditionals.h>
 #include <CoreMedia/CoreMedia.h>
@@ -71,6 +72,7 @@
     [self.mSession beginConfiguration];
 
     // Add session input
+    NSLog(@"Add session input");
     NSError *error;
     self.mDeviceInput = [AVCaptureDeviceInput deviceInputWithDevice:self.mDevice error:&error];
     if (self.mDeviceInput == nil) {
@@ -154,7 +156,9 @@ bool StreamClient::setupDevice(const char *udid) {
 }
 
 void StreamClient::start() {
+    NSLog(@"StreamClient::start()");
     [impl->mVideoSource.mSession startRunning];
+    NSLog(@"StreamClient::start() done");
 }
 
 void StreamClient::stop() {

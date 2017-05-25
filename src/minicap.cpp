@@ -157,7 +157,7 @@ int main(int argc, char **argv) {
     client.setFrameListener(&gWaiter);
     client.start();
 
-    if (!gWaiter.waitForFrame()) {
+    if (gWaiter.waitForFrameLimitTime(64) <= 0) {
         return EXIT_SUCCESS;
     }
     client.stop();

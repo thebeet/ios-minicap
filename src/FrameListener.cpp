@@ -33,3 +33,22 @@ int FrameListener::waitForFrame() {
     return 0;
 }
 
+int FrameListener::waitForFrameLimitTime(int time) {
+    std::cerr << "Wait Frame" << std::endl;
+    std::unique_lock<std::mutex> lock(mMutex);
+    int limitTime = time;
+    while (mRunning) {
+        if (mCondition.wait_for(lock, mTimeout, [this]{return mPendingFrames > 0;})) {
+            std::cerr << "Wait Frame done" << std::endl;
+            return mPendingFrames--;
+        }
+        if (limitTime > 0) {
+            limitTime--;
+            if (limitTime == 0) {
+                return -1;
+            }
+        }
+        std::cerr << "Wait Frame none" << std::endl;
+    }
+    return 0;
+}

@@ -4,7 +4,7 @@
 
 JpegEncoder::JpegEncoder(Frame *frame) {
     mCompressor = tjInitCompress();
-    mQuality = 50;
+    mQuality = 40;
     mSubsampling = TJSAMP_420;
     mFormat = TJPF_BGRA;
     mBufferSize = tjBufSize(

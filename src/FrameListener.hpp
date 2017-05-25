@@ -13,6 +13,7 @@ public:
     bool isRunning();
     void onFrameAvailable();
     int waitForFrame();
+    int waitForFrameLimitTime(int time);
 
 private:
     bool mRunning;
