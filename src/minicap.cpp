@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <sys/poll.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdlib.h>
@@ -19,6 +20,8 @@
 #   define MSG_NOSIGNAL SO_NOSIGPIPE
 # endif
 #endif
+
+char buf[16777216];
 
 static FrameListener gWaiter;
 
@@ -137,6 +140,8 @@ void parseResolution(const char* resolution, uint32_t* width, uint32_t* height) 
 }
 
 int main(int argc, char **argv) {
+    setbuf(stdin, buf);
+
     const char *udid = NULL;
     const char *resolution = NULL;
     int port = 0;
@@ -203,6 +208,20 @@ int main(int argc, char **argv) {
             putUInt32LE(frameSize, encoder.getEncodedSize());
             pumps(1, frameSize, 4);
             pumps(1, encoder.getEncodedData(), encoder.getEncodedSize());
+
+            struct pollfd fds;
+            int ret;
+            fds.fd = 0; /* this is STDIN */
+            fds.events = POLLIN;
+            ret = poll(&fds, 1, 0);
+            if(ret == 1) {
+                char newResolution[1000];
+                uint32_t newW = 0, newH = 0;
+                std::cin >> newResolution;
+                parseResolution(newResolution, &newW, &newH);
+                client.setResolution(newW, newH);
+            }
+
         }
         client.stop();
     }
