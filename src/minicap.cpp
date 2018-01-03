@@ -165,8 +165,6 @@ int main(int argc, char **argv) {
     if (gWaiter.waitForFrameLimitTime(64) <= 0) {
         return EXIT_SUCCESS;
     }
-    client.stop();
-
     Frame frame;
 
     client.lockFrame(&frame);
@@ -175,11 +173,11 @@ int main(int argc, char **argv) {
 
     DeviceInfo realInfo, desiredInfo;
     realInfo.orientation = 0;
-    realInfo.height = frame.height;
-    realInfo.width = frame.width;
+    realInfo.height = height;
+    realInfo.width = width;
     desiredInfo.orientation = 0;
-    desiredInfo.height = frame.height;
-    desiredInfo.width = frame.width;
+    desiredInfo.height = height;
+    desiredInfo.width = width;
 
     Banner banner(realInfo, desiredInfo);
     client.releaseFrame(&frame);
@@ -196,7 +194,6 @@ int main(int argc, char **argv) {
         //send(socket, banner.getData(), banner.getSize(), 0);
         write(1, banner.getData(), banner.getSize());
 
-        client.start();
         while (gWaiter.isRunning() and gWaiter.waitForFrame() > 0) {
             ppid = getppid();
             if (ppid == 1) {
@@ -223,8 +220,8 @@ int main(int argc, char **argv) {
             }
 
         }
-        client.stop();
-    }
 
+    }
+    client.stop();
     return EXIT_SUCCESS;
 }
