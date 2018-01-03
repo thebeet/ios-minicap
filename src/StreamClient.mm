@@ -236,6 +236,7 @@ void StreamClient::releaseFrame(Frame *frame) {
 }
 
 void StreamClient::setResolution(uint32_t width, uint32_t height) {
+    std::cerr << "set resolution:" << width << "x" << height << std::endl;
     [impl->mVideoSource.mSession beginConfiguration];
     NSMutableDictionary *settings = [impl->mVideoSource.mDeviceOutput.videoSettings mutableCopy];
     [settings setObject:[NSNumber numberWithUnsignedInt:width] forKey:(id)kCVPixelBufferWidthKey];
